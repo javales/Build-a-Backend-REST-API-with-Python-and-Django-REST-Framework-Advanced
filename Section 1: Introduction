@@ -1,11 +1,31 @@
 # 1. Welcome to Build a Backend API with Django REST Framework - Advanced
+- course different from others because it uses Test Drive Development (TDD)
+- TDD improves Code Quality, Comprehension, and Confidence
+- Learning: Python, Django, Docker, Django Framework, Travis-CI, Postgres Database
+
 
 # 2. Intro to the course
+- Building a Recipe API
+- Typical features of an API: user authentication, creating objects, listing/filtering, uploading images
+
+[[Resources]]
+Finished project on Github
+https://github.com/LondonAppDeveloper/recipe-app-api
+
 
 # 3. Course structure
 
 # 4. How to get the most out of this course
+- Finish it!
+
 
 # 5. How to get help
+- first Google it
+- then check Q&A before asking a question
+
+[[Resources]]
+HOW TO ASK QUESTIONS ON STACK OVERFLOW (AND GET ANSWERS)
+https://www.londonappdeveloper.com/how-to-ask-questions-on-stack-overflow-and-get-answers/
+
 
 # 6. Windows 10 Home Workaround
