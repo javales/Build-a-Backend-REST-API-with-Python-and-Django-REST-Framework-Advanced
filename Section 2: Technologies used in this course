@@ -25,6 +25,13 @@ https://www.postgresql.org/
 
 
 # 8. Django
+- web framework that will underpin the API
+- popular Python web framework for building web applications
+- many features to allow building applications rapidly
+- main features we'll use: Django Object Relational Mapper (ORM) and the Django Admin
+- [ORM] - provides easy conversion of objects in API to rows in database (e.g. create [Django model] for recipe object; then, Django will automatically create [recipe table] for us and an easy to use [interface for managing rows] in this table)
+- [Django Admin] - provides turnkey website we can use to manage objects in our database, useful for developing and testing on our local machine
+
 
 # 9. Django REST Framework
 
