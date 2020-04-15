@@ -1,4 +1,9 @@
 # 7. Python
+- Python 3.7
+- Application logic and unit tests
+- Follow PEP-8 best practice guidelines (e.g. all lines maxium 79 characters, adding doc strings to our functions)
+- Use code linting tool to automatically check our code and automatically notify when any PEP-8 guidelines broken
+
 [[Resources]]
 Python
 https://www.python.org/
