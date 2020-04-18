@@ -34,11 +34,54 @@ https://www.postgresql.org/
 
 
 # 9. Django REST Framework
+- extension to Django that adds features [for building REST APIs]
+- comes with [built-in authentication system] to add authentication to API endpoints
+- Django REST Framework [Viewsets] will be used to create the structure of our API and provide all necessary endpoints for managing objects
+- [Serializers] will provide validation on all requests to our API and to help convert JSON objects to Django database models
+- comes with [browsable Web API] that we can use to test our endpoints in the browser as we go
+
 
 # 10. Docker
+- virtualization tool for isolating our project's dependencies from the machine it's running on
+- will wrap our project and its dependencies into a single image
+- provides consistent development environments across multiple machines
+- can be used to deploy our project to AWS, Azure, or GCP
+
 
 # 11. Travis-CI
+- will be used to automatically run our [linting] and [unit tests] every time we make changes to our code
+- a Continuous Integration tool that integrates well with GitHub
+- can be configured to run a [script] every time you make changes to project code
+- we will write a script that will run our unit test and linting tool and if either [fail], Travis-CI will notify by email that a build is broken
+- allows identifying issues early -- before reaching production code or end product
+
 
 # 12. Postgres
+- database for our project
+- opensource, production grade database
+- easy to get up and running using Docker
+
 
 # 13. What is test driven development?
+[Unit Tests] are tests that confirm your code does what it's supposed to do
+- start by isolating a piece of code to be tested -- e.g. function or class
+- most of the tests we write will be making actual API calls to our endpoints
+- knowing which code to target becomes clearer with practice
+
+## Test are usually broken down into Three Stages:
+### 1. Setup - sample database objects (e.g. sample recipe)
+### 2. Execution - call the code to be tested
+### 3. Assertion - confirm expected output, that the code does what it's supposed to do
+
+## Why write Unit Tests?
+- most development teams have a policy that they MUST be written for all code
+- makes maintaining and making changes to code a lot easier
+- identifies when something breaks as a side effect of your change before ending up production build
+- takes longer, but makes making changes and adding features a lot easier
+- encourages devs to run testable code via clear input and output
+- Traditional Development = Implement Feature > Write Test
+- Test Driven Development = Write Test (ensure it fails) > Implement Feature (ensuring test passes)
+- increases test coverage because you can be sure all code written with TDD has been tested
+- helps ensure your tests actually work; just as bugs can exist in code, bugs can exist in test code
+- encourages writing of good code, because bad code is difficult to test
+- unit tests serve as a guideline for when to stop coding
