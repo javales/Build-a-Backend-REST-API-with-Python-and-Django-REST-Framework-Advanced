@@ -1,0 +1,80 @@
+# 16. Setup new GitHib project
+## project name: recipe-app-api
+## Initialize this repository with a README
+## python .gitignore file
+## MIT License
+- means anyone can the source code for free
+- not going to enable this
+
+[[Resources]]
+[Connecting to GitHub with SSH]
+https://help.github.com/en/github/authenticating-to-github/connecting-to-github-with-ssh
+
+
+# 17. Add Dockerfile
+## use [3.7-alpine] image
+
+## set [python unbuffered] environment variable
+- [ENV PYTHONUNBUFFERED 1]
+- recommended when running Python in containers to not allow Python to buffer the outputs
+- just prints them directly
+- avoids complications running Docker application
+
+## store dependencies in requirements.txt list
+- [COPY ./requirements.txt /requirements.txt] copy file from our folder (containing Dockerfile) to image
+- [RUN pip install -r /requirements.txt] installs the depencies found in requirements.txt into image
+
+## make directory in image to store application source code
+- [RUN mkdir /app]
+- [WORKDIR /app]
+- [COPY ./app /app]
+
+## create a user that will run our application using Docker
+- [RUN adduser -D user] D is to create a user used for running applications only
+- [USER user] switches Docker to the user we have just created
+- reason to do this is for security purposes
+- if you don't do this, then the image will run our application using the root account
+-- not recommended because if somebody compromises our application, they can have root access to the whole image and do malicious things
+- a separate account just for our application limits the scope an attacker would have within our Docker container
+
+## save
+
+## first line of requirements.txt, install Django
+- https://pypi.org/ then search "django" 
+- LESSON's latest version is [Django 2.1.3]
+-- so, syntax is [Django>=2.1.3,<2.2.0]
+
+## then Django REST Framework
+- Python Package Index search "djangorestframework" WITH NO SPACES
+- LESSON's latest version is [djangorestframework 3.9.0]
+
+## build the Docker image
+- [docker build .]
+
+[[Resources]]
+[Dockerfile reference]🔗
+https://docs.docker.com/engine/reference/builder/
+
+[Docker Hub]
+https://hub.docker.com/
+
+[Python Package Index PyPi]
+https://pypi.org/
+
+[CODE: Dockerfile]
+https://gist.github.com/LondonAppDev/27c64d2c2df3555470812d4d77611389
+
+[CODE: requirements.txt]
+https://gist.github.com/LondonAppDev/a7a35a2b39ea4a3fa2c2a5283f300fc9
+
+
+# 18. Configure Docker Compose
+
+[[Resources]]
+
+
+# 19. Custom configuration for Linux users
+
+# 20. Create Django project
+
+[[Resources]]
