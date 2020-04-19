@@ -1,0 +1,10 @@
+# 14. System setup
+
+[docker-compose --version]
+AirTight:udemy-docker-mastery twostudy$ docker-compose --version
+docker-compose version 1.25.4, build 8d51620a
+
+[ModHeaders]
+To test our API, we use Google Chrome with the ModHeader extension.
+
+# 15. Windows 10 Home Workaround
