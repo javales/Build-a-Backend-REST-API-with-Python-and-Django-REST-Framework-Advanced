@@ -151,5 +151,27 @@ If you have any issues with the above workaround, please message me in the Q&A a
 
 
 # 20. Create Django project
+- create a Django project using the Docker configuration we created in the previous lessons
+- used docker-compose to run a command on our image that contains the Django dependency
+- that will create the project file that we need for our app
+
+## create project
+- [docker-compose run app] then name of the service you want to run the command on (i.e. "app" from the docker-compose.yml)
+- anything after the above is what gets run on the Linux container created using our Dockerfile
+- [docker-compose run app sh -c "django-admin.py startproject app ."] where [sh -c] is optional and just makes it clear what command you're running on vs the docker-compose command
+-- django-admin.py is the Django admin management command that comes when you install Django through the requirements.txt
+-- it runs the [startproject] command to start a new project called [app] in our current locaiton
+-- because it's running based on our Docker container, it will be based on our last Dockerfile WORKDIR path of [/app]
+
+## commit to Git
+- [git add .]
+- [git commit -a]
+- [Set up Docker and Django project]
+- Escape, then [:wq]
 
 [[Resources]]
+[django-admin startproject name [directory]]
+https://docs.djangoproject.com/en/2.1/ref/django-admin/#startproject
+
+[docker-compose run]
+https://docs.docker.com/compose/reference/run/
