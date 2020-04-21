@@ -1,0 +1,30 @@
+# 23. Writing a simple unit test
+- write a basic unit test to learn basics
+- function that adds two numbers together
+
+## create [calc.py] in app/app with a simple function
+def add(x, y):
+    """add two numbers together"""
+    return x + y
+[save]
+
+## create a unit test for our function
+
+
+[[Resources]]
+Django unit tests
+https://docs.djangoproject.com/en/2.1/internals/contributing/writing-code/unit-tests/
+
+CODE: calc.py
+https://gist.github.com/LondonAppDev/6316c67f756453d2107b0b55643c1d47
+
+CODE: tests.py
+https://gist.github.com/LondonAppDev/33b529adb26415beea93785323162faa
+
+
+# 24. Writing a unit test with TDD
+
+[[Resources]]
+
+
+Quiz 2: Django Unit Tests
