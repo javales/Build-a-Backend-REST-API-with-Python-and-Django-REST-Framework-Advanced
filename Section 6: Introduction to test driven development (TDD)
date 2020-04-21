@@ -8,7 +8,44 @@ def add(x, y):
     return x + y
 [save]
 
-## create a unit test for our function
+## create a unit test [tests.py] for our function
+- Django unit test framework looks for any files that begin with "test" and uses them to run the Django unit test command
+
+### first import Django test case
+[from django.test import TestCase]
+- TestCase is a class that comes with Django with helper functions that help us test our Django code
+
+### next, import function we're going to test
+[from app.calc import add]
+
+### next, create the test class
+- create class that inherits from the TestCase
+- then define the test
+- then, the usual second component (the first being the [setup stage] where you set up the function to be tested) which is the [assertion] which is when you actually test the output and confirm the output equals what you expect it to equal
+- just like how Django searches for files that begin with test, test functions must all begin with test (hence [test_add_numbers]
+
+class CalcTests(TestCase):
+    def test_add_numbers(self):
+        """test that two numbers are added together"""
+        self.assertEqual(add(3, 8), 11)
+[save]
+
+### open terminal and run the command we will use to run our tests
+[docker-compose run app sh -c "python manage.py test"]
+- runs our docker container
+- runs our tests
+
+AirTight:udemy-recipe-app-api twostudy$ docker-compose run app sh -c "python manage.py test"
+Creating test database for alias 'default'...
+System check identified no issues (0 silenced).
+.
+----------------------------------------------------------------------
+Ran 1 test in 0.002s
+
+OK
+Destroying test database for alias 'default'...
+
+[[TIP]] If doing above on Windows and get error saying no such file or directory, try [Settings > Shared drive > Reset credentials]
 
 
 [[Resources]]
@@ -23,8 +60,102 @@ https://gist.github.com/LondonAppDev/33b529adb26415beea93785323162faa
 
 
 # 24. Writing a unit test with TDD
+- writing the test BEFORE you write the code
+- adding substraction feature to our calc model, instead of addition
+- this time with test drive development
+
+## open tests.py, add new TestCase
+- make an assertion that some kind of input some kind of output
+- be sure to also import subtract from calc function
+
+## run test to confirm failure
+----------------------------------------------------------------------
+Ran 1 test in 0.001s
+
+FAILED (errors=1)
+Destroying test database for alias 'default'...
+
+
+## define [subtract] function, but not completely, to confirm different result
+- when you don't [return] anything, it defaults to [None]
+======================================================================
+FAIL: test_subtract_numbers (app.tests.CalcTests)
+test that values are subtracted and returned
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "/app/app/tests.py", line 11, in test_subtract_numbers
+    self.assertEqual(subtract(5, 11),6)
+AssertionError: None != 6
+
+
+## define [subtract] function, correctly, to confirm success
+----------------------------------------------------------------------
+Ran 2 tests in 0.003s
+
+OK
+Destroying test database for alias 'default'...
+
+
+## then also run flake command to run linting as well
+[docker-compose build] #necessary since building of container had not been done since adding flake to the requirements.txtdock
+[docker-compose run app sh -c "python manage.py test && flake8"]
+
+### problems with this calc.py:
+def add(x, y):
+    """add two numbers together"""
+    return x + y
+
+def subtract(x,y):
+    """subtract x from y"""
+    return y - x
+    
+### problems with this tests.py
+from django.test import TestCase
+from app.calc import add, subtract
+
+class CalcTests(TestCase):
+    def test_add_numbers(self):
+        """test that two numbers are added together"""
+        self.assertEqual(add(3, 8), 11)
+
+    def test_subtract_numbers(self):
+        """test that values are subtracted and returned"""
+        self.assertEqual(subtract(5, 11),6)
+
+----------------------------------------------------------------------
+Ran 2 tests in 0.002s
+
+OK
+Destroying test database for alias 'default'...
+./app/calc.py:5:1: E302 expected 2 blank lines, found 1
+./app/calc.py:5:15: E231 missing whitespace after ','
+./app/calc.py:7:1: W391 blank line at end of file
+./app/tests.py:4:1: E302 expected 2 blank lines, found 1
+./app/tests.py:11:41: E231 missing whitespace after ','
+
+### cleaned up above problems and now:
+----------------------------------------------------------------------
+Ran 2 tests in 0.004s
+
+OK
+Destroying test database for alias 'default'...
+
 
 [[Resources]]
+unittest library assert statement
+https://docs.python.org/3/library/unittest.html#assert-methods
+
+Django manage.py test
+https://docs.djangoproject.com/en/2.1/ref/django-admin/#test
+
+CODE: tests.py
+https://gist.github.com/LondonAppDev/32bf51d698eede5a92649405e73faf0a
+
+CODE: tests.py (before)
+https://gist.github.com/LondonAppDev/a5cae850c18d1ae13f4614668f43cac5
+
+CODE: tests.py (after)
+https://gist.github.com/LondonAppDev/f1f170281f7691dcbce4956eac898654
 
 
-Quiz 2: Django Unit Tests
+# Quiz 2: Django Unit Tests
