@@ -27,8 +27,97 @@ git branch #confirms now in new branch
 - can ONLY have EITHER the [tests] folder or the [tests.py]
 ^BEST_PRACTICES^
 
+[[RESOURCES]]
+Django manage.py startapp doc
+https://docs.djangoproject.com/en/2.1/ref/django-admin/#startapp
+Django settings INSTALLED_APPS
+https://docs.djangoproject.com/en/2.1/ref/settings/#installed-apps
+
 
 # 26. Add tests for custom user model
+- core app done
+- now create our custom user model
+- since we're using TDD, we're going to write our [tests] FIRST then implement our [model] afterwards
+
+## look at settings.py in "app" folder
+- confirm core app is added to INSTALLED_APPS; add it
+
+## create test_models.py in "tests" folder
+- testing that our helper function for our model can create a new user
+- use the create_user function to create a user
+- verify the user has been created as expected
+
+[[CODE]]
+from django.test import TestCase
+from django.contrib.auth import get_user_model
+
+
+class ModelTests(TestCase):
+
+  def test_create_user_with_email_successful(self):
+    """Test creating a new user with an email is successful"""
+    email = 'test@londonappdev.com'
+    password = 'testpass123'
+    user = get_user_model().objects.create_user(
+      email=email,
+      password=password
+    )
+    
+    self.assertEqual(user.email, email)
+    self.assertTrue(user.check_password(password))
+    
+    
+
+[[CODE EXPLAINED]]
+- import TestCase class
+- import get_user_model helper function that comes with Django; "can import the user model directly from the models, but this is not recommended with django because at some point in the project you may want to change what your user model is and if everything is using the get_user_model function then that's really easy to do because you just change it in the settings instead of having to change all the references to the user model"
+- create test class
+- create test case
+- set up the test by passing in email address and a password then verify that the user has been created and the email address and password are correct
+- assign email value to email that does NOT have to be valid
+- assign password that does not have to be secure because just going to be created for a moment while the test runs followed by the model being deleted afterwards
+- call create_user function on the user manager for our [user model] that we're going to create in a future step
+- now that we have our user, we can run some assertions to make sure the user was created correctly
+- confirm user.email equals user value that was passed in
+- can't check the password the same way, because it's encrypted; can only check it using the [check password function] on our [user model]
+- check_password function is a helper function that comes with the Django user model and it returns True if the password is correct and false if not
+[save]
+
+## run unit tests to test that the test FAILS
+[docker-compose run app sh -c "python manage.py test"]
+AirTight:udemy-recipe-app-api twostudy$ docker-compose run app sh -c "python manage.py test"
+Creating test database for alias 'default'...
+System check identified no issues (0 silenced).
+E
+======================================================================
+ERROR: test_create_user_with_email_successful (core.tests.test_models.ModelTests)
+Test creating a new user with an email is successful
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "/app/core/tests/test_models.py", line 13, in test_create_user_with_email_successful
+    password=password
+TypeError: create_user() missing 1 required positional argument: 'username'
+
+----------------------------------------------------------------------
+Ran 1 test in 0.011s
+
+FAILED (errors=1)
+Destroying test database for alias 'default'...
+
+
+[[RESOURCES]]
+Substituting a custom User model
+https://docs.djangoproject.com/en/2.1/topics/auth/customizing/#substituting-a-custom-user-model
+
+get_user_model() docs
+https://docs.djangoproject.com/en/2.1/topics/auth/customizing/#django.contrib.auth.get_user_model
+
+check_password() docs
+https://docs.djangoproject.com/en/2.1/topics/auth/customizing/#django.contrib.auth.models.AbstractBaseUser.check_password
+
+CODE: test_models.py
+https://gist.github.com/LondonAppDev/2b76e595bd5fba90883ebe4a0a86d436
+
 
 # 27. Implement custom user model
 
