@@ -1,4 +1,32 @@
 # 25. Create core app
+- core app will hold all central code important to the sub-apps we create in the system
+- anything shared between one or more apps -- e.g. the migrations, database,... -- all in a core module so it's all in one, central place
+
+[[GIT]]
+https://stackoverflow.com/questions/47630950/how-can-i-switch-to-another-branch-in-git
+git remote show origin
+created Section7DjangoCustomUserModel branch in github.com
+git fetch
+git checkout Section7DjangoCustomUserModel
+git branch #confirms now in new branch
+
+## clean out the throw-away code from previous lessons
+- calc.py, tests.py
+
+## create app from terminal using [django manage] command
+- [docker-compose run app sh -c "python manage.py startapp core"]
+- creates new "core" app (folder) in project alongside the "app" app (folder)
+
+## clean out files not going to be using
+- not going to be using [tests.py] -- will explain in future video (basically: moving it to folder called "tests" to make it clearer where the tests are)
+- not going to use [views.py], because it won't be serving anything; will simply be holding our database
+
+## create new folder called tests
+- inside, create __init__.py where we store our tests
+- can create outside folder in file called tests.py, but when we might have multiple tests, might want to split them up into multiple test files
+- can ONLY have EITHER the [tests] folder or the [tests.py]
+^BEST_PRACTICES^
+
 
 # 26. Add tests for custom user model
 
