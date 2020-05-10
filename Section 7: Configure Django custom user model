@@ -120,6 +120,130 @@ https://gist.github.com/LondonAppDev/2b76e595bd5fba90883ebe4a0a86d436
 
 
 # 27. Implement custom user model
+- create custom user model to get tests to pass
+- create user model in our [models.py] file in the "core" app
+- then update [settings.py] file in custom auth(?) user model
+
+# models.py
+
+[[CODE]]
+from django.db import models
+from django.contrib.auth.models import AbstractBaseUser, BaseUserManager, \
+                                        PermissionsMixin
+                                        
+
+class UserManager(BaseUserManager):
+  
+  def create_user(self, email, password=None, **extra_fields):
+    """Create and saves a new user"""
+    user = self.model(email=email, **extra_fields)
+    user.set_password(password)
+    user.save(using=self._db)
+    
+    return user
+
+
+[[CODE EXPLAINED]]
+- under import models, import the [abstract base user], the [base user manager], and the [permissions mixin]
+- above are all the things required to extend the Django user model while making use of some of the features that come with the django user model out of the box
+- next create [user manager class] - provides helper functions for creating a user or super user
+- extend the [BaseUserManager], pulling in all the features that come with the BaseUserManager, BUT we're going to override a couple of the functions to handle our email address instead of the username that it expects
+- [**extra_fields] means take any other extra arguments passed in when you call create_user and pass them into extra fields so we can parse them into extra fields and then add any additional fields that we create with user model; not required, but makes function more flexible because every time we add new fields to our user, we don't have to add them to the create_user definition and instead just add them ad hoc as we add them to our model
+- within the function definition where user is assigned, [**extra_fields] unwinds the extra fields into here
+- parses email, first, then parses anything extra we add
+- the way the "manager commands" work is you can access the model the manager is for by typing self.model
+- can't set password in that same line, because password must be encrypted using [set_password] helper function that comes with the Django AbstractBaseUser
+- next, to save the user, type [using=self._db] for supporting multiple databases which we are not going to use in the course, but it is a BEST_PRACTICE
+- next return the user
+
+## IN SUMMARY
+- create a new user model
+- set the password
+- save the model
+- return the user model it has just created
+
+## Create our model
+- now the we have our manager class, create our model
+
+[[CODE CONT.]]
+
+class User(AbstractBaseUser, PermissionsMixin):
+  """Custom user model that supports using email instead of username"""
+  email = models.EmailField(max_length=255, unique=True)
+  name = models.CharField(max_length=255)
+  is_active = models.BooleanField(default=True)
+  is_staff = models.BooleanField(default= False)
+  
+  objects = UserManager()
+  
+  USERNAME_FIELD = 'email'
+
+[[CODE EXPLAINED]]
+- we are going to extend from the AbstractBaseUser and PermissionsMixin, giving us 
+- those give all the features that come out of the box with the Django user model, but we can then build on top of them and customize it to support our email address
+- next define fields of our database model
+- first email
+- [unique] means you can only create one user with each email
+- [models] is the import that is added by default with the [create app] command so it should be already on top of the file
+- next add a name
+- then determine if the user in the system is active or not, allowing us to deactive users
+- but default to not being staff, creation of which requires use of a special command in a future video
+- next assign user manager to the objects attribute
+- finally we add username field equals email, since it defaults to username and we are customizing that to email so we can use an email address instead
+- [save]
+
+## next the settings.py
+- customize our user model
+- go to the very bottom to add new settings
+
+[[CODE]]
+AUTH_USER_MODEL = 'core.User'
+
+[[CODE EXPLAINED]]
+- AUTH_USER_MODEL must be all caps, assigning a string where core is name of app, and user is name of model in our app that we want to assign as the custom user model
+- [save]
+
+## next make migrations
+- go to Terminal
+- [docker-compose run app sh -c "python manage.py makemigrations core"]
+- sometimes it doesn't work to run makemigrations on its own, so specify app name afterwards
+- runs our database migrations, which create a new migrations folder and files in "core" folder which are the instructions for Django to create the model in the real database as an advanced feature we are not getting into
+- sets up database, and every time you make a change to the models, you need to run the [migrations] again
+
+AirTight:udemy-recipe-app-api twostudy$ docker-compose run app sh -c "python manage.py makemigrations core"
+Migrations for 'core':
+  core/migrations/0001_initial.py
+    - Create model User
+   
+## run tests again expecting a pass
+
+AirTight:udemy-recipe-app-api twostudy$ docker-compose run app sh -c "python manage.py test"
+Creating test database for alias 'default'...
+System check identified no issues (0 silenced).
+.
+----------------------------------------------------------------------
+Ran 1 test in 0.224s
+
+OK
+Destroying test database for alias 'default'...
+
+
+[[Resources]]
+AbstractBaseUser docs
+https://docs.djangoproject.com/en/2.1/topics/auth/customizing/#django.contrib.auth.models.AbstractBaseUser
+
+BaseUserManager docs
+https://docs.djangoproject.com/en/2.1/topics/auth/customizing/#django.contrib.auth.models.BaseUserManager
+
+PermissionsMixin docs
+https://docs.djangoproject.com/en/2.1/topics/auth/customizing/#django.contrib.auth.models.PermissionsMixin
+
+CODE: models.py
+https://gist.github.com/LondonAppDev/f6d0bf57d6ed4fa21a381ddded67bd34
+
+CODE: settings.py
+https://gist.github.com/LondonAppDev/765a82921a1739efd276c11dce29a726
+
 
 # 28. Normalize email addresses
 
