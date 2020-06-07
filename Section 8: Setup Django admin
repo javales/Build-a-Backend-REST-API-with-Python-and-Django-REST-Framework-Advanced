@@ -1,4 +1,83 @@
 # 31. Add tests for listing users in Django admin
+- Update Django admin so we can update our custom user model
+- Easy interface to login to see what users are created, make changes to existing users
+
+## Start by adding the tests
+- create test_admin.py
+
+[[CODE START]]
+from django.test import TestCase, Client
+from django.contrib.auth import get_user_model
+from django.urls import reverse
+[[CODE END]]
+
+[[CODE EXPLAINED]]
+- Add get_user_model using "from django.contrib.auth import get_user_model"
+- Add helper function called [reverse] that allows generating URLs for Django admin page
+- Import test client to allow us to make test requests to our application in unit tests
+
+- create test class
+
+[[CODE START]]
+class AdminSiteTests(TestCase):
+
+    def setUp(self):
+        self.client = Client()
+        self.admin_user = get_user_model().objects.create_superuser(
+            email='admin@londonappdev.com',
+            password='password123'
+        )
+        self.client.force_login(self.admin_user)
+        self.user = get_user_model().objects.create_user(
+            email='test@londonappdev.com',
+            password='password123',
+            name='Test user full name'
+        )
+    
+    def test_users_listed(self):
+        """Test that users are listed on user page"""
+        url = reverse('admin:core_user_changelist')
+        res = self.client.get(url)
+
+        self.assertContains(res, self.user.name)
+        self.assertContains(res, self.user.email)
+[[CODE END]]
+
+[[CODE EXPLAINED]]
+- create test class called AdminSiteTests, inherit from TestCase
+
+## create setUp function to for pre-test tasks
+- create [setUp] function that runs before every test we run; takes care of setUp tasks required before every test in our test case class
+- setUp creates test client
+- setUp adds new user that will be used to test
+- setUp makes sure user is logged in to the client
+- setUp creates regular user that is not authenticated but is used to list in our application
+
+[self.client.force_login(self.admin_user)]
+- use Client helper function that allows you to log a user in with Django authentication, making test easier to write, because don't have to manually log the user in
+
+[self.user = get_user_model().objects.create_user]
+- spare user for testing listings and things like that
+
+## create first test that users are listed in our Django admin
+- REASON: we need to customize the Django admin to work with our custom_user_model, the DEFAULT_user_model expects a username; because of that, the DEFAULT Django admin for the user model ALSO expects a username; but we don't have a username, we just have an email address, so we need to make changes to our [admin.py] just to make suer it supports our custom_user_model
+
+[url = reverse('admin:core_user_changelist')]
+- admin is the app
+- core_user_changelist is the url you want
+- urls are defined in the Django admin documentation linked in [[Resources]]
+- this generates the URL for our "list user" page
+- using [reverse] saves us from changing the URL in code if it ever changes
+
+[res = self.client.get(url)]
+- like shortening response to [res] because makes test cleaner; otherwise have lots of long lines of code
+- uses test client to perform a get on the url above
+
+[self.assertContains(res, self.user.name)
+self.assertContains(res, self.user.email)]
+- [assertContains] is a Django custom assertion that checks that our response contains a certain item
+- also checks that the HTTP response was HTTP 200 and that it looks into the content of this [res] with the intelligence to find what yo specify as post-comma item
+
 
 [[Resources]]
 Django admin docs
@@ -10,8 +89,39 @@ https://gist.github.com/LondonAppDev/19163f8db6b115f73e48d74bcee25807
 Django test client docs
 https://docs.djangoproject.com/en/2.2/topics/testing/tools/#overview-and-a-quick-example
 
+## run test, expecting failure
+AirTight:udemy-recipe-app-api twostudy$ docker-compose run app sh -c "python manage.py test && flake8"
+Creating test database for alias 'default'...
+System check identified no issues (0 silenced).
+E....
+======================================================================
+ERROR: test_users_listed (core.tests.test_admin.AdminSiteTests)
+Test that users are listed on user page
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "/app/core/tests/test_admin.py", line 22, in test_users_listed
+    url = reverse('admin:core_user_changelist')
+  File "/usr/local/lib/python3.7/site-packages/django/urls/base.py", line 90, in reverse
+    return iri_to_uri(resolver._reverse_with_prefix(view, prefix, *args, **kwargs))
+  File "/usr/local/lib/python3.7/site-packages/django/urls/resolvers.py", line 622, in _reverse_with_prefix
+    raise NoReverseMatch(msg)
+django.urls.exceptions.NoReverseMatch: Reverse for 'core_user_changelist' not found. 'core_user_changelist' is not a valid view function or pattern name.
+
+----------------------------------------------------------------------
+Ran 5 tests in 0.650s
+
+FAILED (errors=1)
+Destroying test database for alias 'default'...
+
+[  File "/usr/local/lib/python3.7/site-packages/django/urls/resolvers.py", line 622, in _reverse_with_prefix
+    raise NoReverseMatch(msg)
+django.urls.exceptions.NoReverseMatch: Reverse for 'core_user_changelist' not found. 'core_user_changelist' is not a valid view function or pattern name.]
+- expected because we haven't created our admin yet
+
 
 # 32. Modify Django admin to list our custom user model
+
+
 
 # 33. Modify Django admin to support changing user model
 
