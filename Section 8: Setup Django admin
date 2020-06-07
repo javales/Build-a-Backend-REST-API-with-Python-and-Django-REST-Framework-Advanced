@@ -1,5 +1,16 @@
 # 31. Add tests for listing users in Django admin
 
+[[Resources]]
+Django admin docs
+https://docs.djangoproject.com/en/2.1/ref/contrib/admin/
+
+CODE: test_admin.py
+https://gist.github.com/LondonAppDev/19163f8db6b115f73e48d74bcee25807
+
+Django test client docs
+https://docs.djangoproject.com/en/2.2/topics/testing/tools/#overview-and-a-quick-example
+
+
 # 32. Modify Django admin to list our custom user model
 
 # 33. Modify Django admin to support changing user model
