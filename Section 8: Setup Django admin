@@ -143,5 +143,21 @@ admin.site.register(models.User, UserAdmin)
 
 
 # 33. Modify Django admin to support changing user model
+- update our Django admin to support change our user model-
+- still changes needed to make Django admin class to support our custom user model, since the Edit Page currently won't work in its current state
+
+## test that the Change Page renders correctly
+- 0:33 stopped
+
+[[Resources]]
+Django admin fieldsets
+https://docs.djangoproject.com/en/2.1/ref/contrib/admin/#django.contrib.admin.ModelAdmin.fieldsets
+
+CODE: test_admin.py
+https://gist.github.com/LondonAppDev/ebfe656fd9e6852c93f2d9a482167fd5
+
+CODE: admin.py
+https://gist.github.com/LondonAppDev/afcaa43db95dc00e3e6cce8ba7d2c781
+
 
 # 34. Modify Django admin to support creating users
