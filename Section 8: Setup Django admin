@@ -143,11 +143,17 @@ admin.site.register(models.User, UserAdmin)
 
 
 # 33. Modify Django admin to support changing user model
-- update our Django admin to support change our user model-
+- update our Django admin to support changing our user model
 - still changes needed to make Django admin class to support our custom user model, since the Edit Page currently won't work in its current state
 
 ## test that the Change Page renders correctly
-- 0:33 stopped
+- don't need to test making posts to the Change Page because this all part of the Django admin module and it's not recommended to test the dependencies of your project
+- don't need to test features that are specific to the frameworks or external modules that you're using in your project because it is not manageable
+- also need to rely on the other products testing their own code -- e.g. Django is pretty heavily tested, has a very robust set of tests; same with Django admin, so we don't need to duplicate that by testing in our own project
+- we just to make sure the code that WE write works correctly
+
+## create test called test_user_page_change
+- stopped at 1:24
 
 [[Resources]]
 Django admin fieldsets
