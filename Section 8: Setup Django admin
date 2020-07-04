@@ -167,3 +167,11 @@ https://gist.github.com/LondonAppDev/afcaa43db95dc00e3e6cce8ba7d2c781
 
 
 # 34. Modify Django admin to support creating users
+
+[[Resources]]
+CODE: test_admin.py
+https://gist.github.com/LondonAppDev/ba403019825e0b446c7f58a6b0ff73d0
+
+CODE: admin.py
+https://gist.github.com/LondonAppDev/f0a366d6192a68cc7fe12587c67ededc
+
