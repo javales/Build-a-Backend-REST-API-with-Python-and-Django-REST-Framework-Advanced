@@ -152,8 +152,25 @@ admin.site.register(models.User, UserAdmin)
 - also need to rely on the other products testing their own code -- e.g. Django is pretty heavily tested, has a very robust set of tests; same with Django admin, so we don't need to duplicate that by testing in our own project
 - we just to make sure the code that WE write works correctly
 
-## create test called test_user_page_change
-- stopped at 1:24
+## create test called test_user_change_page
+
+## open admin.py to add fieldsets class variable
+- add sections/fieldsets in change and create page
+- first is None, which is a title for the section
+- include a new import of gettext [from django.utils.translation import gettext as _]
+- this is the recommended convention for converting strings into human readable text by passing it through the translation engine (which can allow supporting additional languages by setting up translation files that allow converting text appropriately)
+- when you're adding just one field like [name], have to be sure to add the comma to make sure it's not seen as a string
+- third section for Permissions
+- then Important Dates section
+
+[[CODE]]
+
+[[CODE EXPLAINED]]
+- have to give test url an argument [args=[self.user.id]]
+- this allows the reverse function to create a url like: [/admin/core/user/1] where 1 is the id of the user
+- then do an http.get on the url with res
+- then test that page renders ok by checking for http 200 OK (using swith self.assertEqual)
+- 
 
 [[Resources]]
 Django admin fieldsets
@@ -167,6 +184,68 @@ https://gist.github.com/LondonAppDev/afcaa43db95dc00e3e6cce8ba7d2c781
 
 
 # 34. Modify Django admin to support creating users
+- last step until Django admin will work with our custom user model -- add new users page to Django admin
+
+## add new test to test_admin.py
+- test the Add Page renders, correctly
+
+## confirm test fails
+AirTight:udemy-recipe-app-api twostudy$ docker-compose run app sh -c "python manage.py test && flake8"
+Creating test database for alias 'default'...
+System check identified no issues (0 silenced).
+E.....
+======================================================================
+ERROR: test_create_user_page (core.tests.test_admin.AdminSiteTests)
+Test that the create user page works
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "/usr/local/lib/python3.7/site-packages/django/contrib/admin/options.py", line 703, in get_form
+    return modelform_factory(self.model, **defaults)
+  File "/usr/local/lib/python3.7/site-packages/django/forms/models.py", line 551, in modelform_factory
+    return type(form)(class_name, (form,), form_class_attrs)
+  File "/usr/local/lib/python3.7/site-packages/django/forms/models.py", line 266, in __new__
+    raise FieldError(message)
+django.core.exceptions.FieldError: Unknown field(s) (username) specified for User
+.
+.
+.
+django.core.exceptions.FieldError: Unknown field(s) (username) specified for User. Check fields/fieldsets/exclude attributes of class UserAdmin.
+
+----------------------------------------------------------------------
+Ran 6 tests in 0.964s
+
+FAILED (errors=1)
+Destroying test database for alias 'default'...
+AirTight:udemy-recipe-app-api twostudy$ 
+
+## correct this by adding the add field sets class variable in admin.py
+- look in Django admin documentation for user admin, which by default takes an add field sets which defines the fields you include on the Add Page which is the same as the Create User page
+- customize the field set to include email address, password, and password 
+- edit page will be used for any additional fields you want to specify beyond above
+
+## save and run test
+AirTight:udemy-recipe-app-api twostudy$ docker-compose run app sh -c "python manage.py test && flake8"
+Creating test database for alias 'default'...
+System check identified no issues (0 silenced).
+......
+----------------------------------------------------------------------
+Ran 6 tests in 0.915s
+
+OK
+Destroying test database for alias 'default'...
+./core/admin.py:6:1: F811 redefinition of unused 'models' from line 4
+
+## finished customization of Django admin
+- now commit changes and push to Github
+
+[[CODE]]
+
+[[CODE EXPLAINED]]
+- add add_fieldsets and the first field is the title of the section we're NOT going to give a title so setting it to None
+- then define fields for the form
+- add the classes that are assigned to the form, using the defaults taken from the documentation
+- then add the fields of email, password1, and password 2
+- be sure to end with comma, since there is only one item in the list, and we don't want Python to be confused into thinking this is an object
 
 [[Resources]]
 CODE: test_admin.py
