@@ -41,5 +41,56 @@ services:
 
 
 # 36. Add postgres support to Dockerfile
+- install Python package that is used for Django to communicate with Docker
+- add dependencies to Dockerfile during the build process
+- update requirements.txt to add the package(s), then change Dockerfile to add the dependencies required to install these packages
+
+## open requirements.txt
+- package recommended by Django for communicating between Django and Postgres is called [psycopg2]
+
+[[CODE]]
+Django>=2.1.3,<2.2.0
+djangorestframework>=3.9.0,<3.10.0
+psycopg2>=2.7.5,<2.8.0
+
+flake8>=3.6.0,<3.7.0
+
+## add dependencies to Dockerfile
+- add between COPY and RUN
+- install PostgreSQL client using Alpine's package manager
+- [--update] = update registry before adding package
+- [--no-cache] = don't store registry index in Dockerfile to minimize extra files and packages included in our container
+
+## install temporary packages needed while we run our requirements (then remove when requirements have run)
+- to minimize footprint of container
+- [--virtual] sets up an alias for our dependencies to allow us to remove those dependencies later
+- indent a little more than standard Python indent
+- dependencies were what he got working after trial and error
+
+## below install requirements line add remove temporary requirements removal
+
+[[CODE]]
+FROM python:3.7-alpine
+MAINTAINER javales
+
+ENV PYTHONUNBUFFERED 1
+
+COPY ./requirements.txt /requirements.txt
+RUN apk add --update --no-cache postgresql-client
+RUN apk add --update --no-cache --virtual .tmp-build-deps \
+      gcc libc-dev linux-headers postgresql-dev
+RUN pip install -r /requirements.txt
+RUN apk del .tmp-build-deps
+
+RUN mkdir /app
+WORKDIR /app
+COPY ./app /app
+
+RUN adduser -D user
+USER user
+
+## run docker-compose build
+- to make sure image builds successfully
+
 
 # 37. Configure database in Django
